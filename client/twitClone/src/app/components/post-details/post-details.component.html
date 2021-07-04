@@ -1,0 +1,170 @@
+<div class="row m-0 p-2 border-bottom" *ngIf="postDetails">
+    <div class="col-2">
+        <img src="assets/images/avatar.jpg" alt="profile pic" class="usr-img">
+    </div>
+    <div class="col-9 post-content-container">
+        <div class="post-header">
+            <span class="text-left">
+                <a [routerLink]="['../profile',postDetails?.postBy?.username]" class="text-dark font-weight-bold">
+                    {{postDetails.postBy?.firstName}} {{postDetails.postBy?.lastName}}
+                </a>
+                <span class="pl-3 text-muted">@{{postDetails.postBy?.username}}</span>
+                <span class="pl-3 text-muted">{{timeDiff(postDetails.createdAt)}}</span>
+            </span>
+            <span class="float-right">
+                a
+            </span>
+        </div>
+        <div class="post-body">
+            {{getContent(postDetails)}}
+        </div>
+        <div class="post-footer row m-0">
+            <div class="col-7 user-actions pl-0">
+                <div class="post-btn-container">
+                    <button  [ngClass]="{'retweeted': isRetweeted(postDetails)}">
+                        <i class="fa fa-retweet"></i>
+                        <span>{{postDetails.retweetUsers.length || ''}}</span>
+                    </button>
+                </div>
+                <div class="post-btn-container" >
+                    <button data-toggle="modal" (click)="setPostForComment(postDetails)" data-toggle="modal" data-target="#myModal" >
+                        <i class="fa fa-comment-o"></i>
+                    </button>
+                </div>
+                <div class="post-btn-container">
+                    <button (click)="like(postDetails)" [ngClass]="{'liked': isLiked(postDetails)}">
+                        <i class="fa fa-heart-o"></i>
+                        <span>{{postDetails.likes.length || ''}}</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-container *ngFor="let rply of replies" >
+<div class="row m-0 p-2 border-bottom" *ngIf="showReplies">
+
+    <div class="col-2">
+        <img src="assets/images/avatar.jpg" alt="profile pic" class="usr-img">
+    </div>
+    <div class="col-9 post-content-container">
+        <div class="post-header">
+            <span class="text-left">
+                <a [routerLink]="['../profile',rply?.postBy?.username]" class="text-dark font-weight-bold">
+                    {{rply.postBy?.firstName}} {{rply.postBy?.lastName}}
+                </a>
+                <span class="pl-3 text-muted">@{{rply.postBy?.username}}</span>
+                <!-- <span class="pl-3 text-muted">{{timeDiff(replies.createdAt)}}</span> -->
+            </span>
+            <span class="float-right">
+                a
+            </span>
+            <div class="text-muted" *ngIf="rply.replyTo">
+                Replying to
+               <a [routerLink]="['../profile',rply.replyTo.postBy.username]">@{{getReplyText(rply)}}</a> 
+            </div>
+        </div>
+        <div class="post-body">
+            {{getContent(rply)}}
+        </div>
+        <div class="post-footer row m-0">
+            <div class="col-7 user-actions pl-0">
+                <div class="post-btn-container">
+                    <button  [ngClass]="{'retweeted': isRetweeted(rply)}">
+                        <i class="fa fa-retweet"></i>
+                        <span>{{rply.retweetUsers.length || ''}}</span>
+                    </button>
+                </div>
+                <div class="post-btn-container" >
+                    <button data-toggle="modal" (click)="setPostForComment(rply)" data-toggle="modal" data-target="#myModal" >
+                        <i class="fa fa-comment-o"></i>
+                    </button>
+                </div>
+                <div class="post-btn-container">
+                    <button (click)="like(rply)" [ngClass]="{'liked': isLiked(rply)}">
+                        <i class="fa fa-heart-o"></i>
+                        <span>{{rply.likes.length || ''}}</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</ng-container>
+
+<div class="modal" id="myModal" *ngIf="postForComment">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Reply</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="row m-0">
+                <div class="col-3">
+                    <img src="assets/images/avatar.jpg" alt="profile pic" class="usr-img">
+                </div>
+                <div class="col-9">
+                    <div class="post-header">
+                        <span class="text-left">
+                            <a [routerLink]="['../profile',postForComment.postBy.username]" class="text-dark font-weight-bold">
+                                {{postForComment.postBy.firstName}} {{postForComment.postBy.lastName}}
+                            </a>
+                            <span class="pl-2 text-muted">@{{postForComment.postBy.username}}</span>
+                            <span class="pl-2 text-muted">{{timeDiff(postForComment.createdAt)}}</span>
+                        </span>
+                        <span class="float-right">
+                            <i class="fa fa-map-pin pr-2"></i>
+                            <i class="fa fa-close"></i>
+                        </span>
+                        <div>Replying to
+                            <a [routerLink]="['../profile',postForComment.postBy.username]">
+                                @{{postForComment.postBy.username}}
+                            </a>
+                        </div>
+                    </div>
+                    <div class="post-body">
+                        {{getContent(postForComment)}}
+                    </div>
+                    <div class="post-footer row m-0">
+                        <div class="col-7 user-actions pl-0">
+                            <div class="post-btn-container">
+                                <button>
+                                    <i class="fa fa-retweet"></i>
+                                    <span>{{postForComment.retweetUsers.length || ''}}</span>
+                                </button>
+                            </div>
+                            <div class="post-btn-container" >
+                                <button>
+                                    <i class="fa fa-comment-o"></i>
+                                </button>
+                            </div>
+                            <div class="post-btn-container">
+                                <button>
+                                    <i class="fa fa-heart-o"></i>
+                                    <span>{{postForComment.likes.length || ''}}</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row m-0">
+                <div class="col-3">
+                    <img src="assets/images/avatar.jpg" alt="profile pic" class="usr-img">
+                </div>
+                <div class="col-9">
+                    <textarea name="" id="" cols="30" rows="3" placeholder="Type your reply" [(ngModel)]="replyPost"></textarea>
+                </div>
+            </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="clsMdl()">Close</button>
+          <button class="post-btn" [disabled]="!replyPost" (click)="replyForPost(postForComment)">Reply</button>
+        </div>
+      </div>
+    </div>
+  </div>

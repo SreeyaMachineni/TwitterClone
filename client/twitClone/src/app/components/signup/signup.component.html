@@ -1,0 +1,22 @@
+
+<div class="signup-container">
+    <div class="card">
+        <h1>Sign up</h1>
+        <form [formGroup]="signUpForm" (ngSubmit)="onSubmit()">
+            
+            <input type="text"  placeholder="first name" formControlName="firstName">
+            <input type="text"  placeholder="last name" formControlName="lastName">
+            <input type="text"  placeholder="email" formControlName="email">
+            <input type="text"  placeholder="user name" formControlName="username">
+            <input type="text"  placeholder="password" formControlName="password">
+            <input type="text"  placeholder="confirm password" formControlName="confirmPassword">
+
+            <p class="text-danger" 
+            *ngIf="(signUpForm.controls.password.touched && signUpForm.controls.confirmPassword.touched) &&  (signUpForm.errors?.perror)">passwords dont match</p>
+        
+            <button type="submit">Submit</button>
+        </form>
+        <p [routerLink]="['']">Already have an account?Login here</p>
+    </div>
+    
+</div>

@@ -1,0 +1,35 @@
+.signup-container{
+    min-height: 100vh;
+    background-color: #0099ff;
+}
+.card{
+    padding: 2rem;
+    width: 550px;
+    left:50%;
+    top:50%;
+    position: absolute;
+    transform: translate(-50%,-50%);
+}
+h1{
+    text-align: center;
+}
+form{
+    display: flex;
+    flex-direction: column;
+}
+
+input[type="text"]{
+    margin-bottom: 20px;
+    padding: 8px;
+}
+button{
+    background: #0099ff;
+    border: none;
+    color: white;
+    padding: 10px;
+}
+.signup-container p{
+    color: #0099ff;
+    text-align: center;
+    cursor: pointer;
+}

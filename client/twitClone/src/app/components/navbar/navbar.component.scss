@@ -1,0 +1,26 @@
+nav{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    min-height: 100vh;
+}
+
+nav a{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    font-size: 30px;
+    width: 55px;
+    height: 55px;
+    text-decoration: none;
+    color: black;
+}
+// #d4edff
+nav a.blue{
+    color:#0099ff
+}
+nav a:hover{
+    background-color: #d4edff;
+    border-radius: 50%;
+}

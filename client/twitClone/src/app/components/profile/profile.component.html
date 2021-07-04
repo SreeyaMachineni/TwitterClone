@@ -1,0 +1,170 @@
+<div *ngIf="profile">
+    <div class="profileHeaderContainer">
+        <div class="coverPhotoContainer">
+            <div class="userImageContainer pl-2">
+                <img src="{{profile.userLoggedIn.profilePic}}" alt="">
+            </div>
+        </div>
+        <div class="profileBtnContainer text-right pt-2">
+            <!-- <div *ngIf="profile.profileUser._id != profile.userLoggedIn._id">
+                dont show follow btn for self profile -->
+            <div>
+                <a  class="profileBtn" [routerLink] = "['messages',profile.profileUser._id]">
+                    <i class="fa fa-envelope"></i>
+                </a>
+                <!-- <button [ngStyle]="getFlwStyls()">{{getFlwBtnTxt()}}</button> -->
+                <button class="follow-btn" (click)="follow(profile.profileUser._id)">
+                    {{getFollowStatus(profile)}}
+                </button>
+            </div>
+        </div>
+        <div class="user-details-container pt-4 pl-2">
+            <span class="display-name">
+                {{profile.profileUser.firstName}} {{profile.profileUser.lastName}}
+            </span>
+            <span class="user-name">
+                @{{profile.profileUser.username}}
+            </span>
+        </div>
+        <div class="followers-container pl-2">
+            <a [routerLink]="['profile',profile.profileUser.username]" class="pr-3">
+                <span class="font-weight-bold">{{following}}</span>
+                <span>Following</span>
+            </a>
+            
+            <a [routerLink]="['profile',profile.profileUser.username]">
+                <span class="font-weight-bold">{{followers}}</span>
+                <span>Followers</span>
+            </a>
+            
+        </div>
+    </div>
+    <div class="tabsContainer">
+          <ul class="row nav nav-pills mb-3" id="pills-tab" role="tablist">
+            <li class="col-6 nav-item" (click)="setIsReply(false)">
+              <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">Posts</a>
+            </li>
+            <li class="col-6 nav-item" (click)="setIsReply(true)">
+              <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">Replies</a>
+            </li>
+          </ul>
+          <div class="tab-content" id="pills-tabContent">
+            <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+                <ng-container *ngFor="let post of posts" >
+                    <div class="pl-3 text-muted" *ngIf="post.retweetData">
+                        <i class="fa fa-retweet"></i> Retweeted by
+                       <a [routerLink]="['../profile',post.postBy.username]">@{{getRetweetText(post)}}</a> 
+                    </div>
+                   
+                        <div class="row m-0 p-2 border-bottom">
+                        <div class="col-3">
+                            <img src="assets/images/avatar.jpg" alt="profile pic" class="usr-img">
+                        </div>
+                        <div class="col-9 post-content-container">
+                            <div class="post-header">
+                                <span class="text-left">
+                                    <a [routerLink]="['../profile',post.postBy?.username]" class="text-dark font-weight-bold">
+                                        {{post.postBy?.firstName}} {{post.postBy?.lastName}}
+                                    </a>
+                                    <span class="pl-3 text-muted">@{{post.postBy?.username}}</span>
+                                    <span class="pl-3 text-muted">{{timeDiff(post.createdAt)}}</span>
+                                </span>
+                               
+                                <div class="text-muted" *ngIf="post.replyTo">
+                                    Replying to
+                                   <a [routerLink]="['../profile',post.postBy.username]">@{{getReplyText(post)}}</a> 
+                                </div>
+                                
+                            </div>
+                            <div class="post-body">
+                                {{getContent(post)}}
+                            </div>
+                            <div class="post-footer row m-0">
+                                <div class="col-7 user-actions pl-0">
+                                    <div class="post-btn-container">
+                                        <button (click)="retweet(post)" [ngClass]="{'retweeted': isRetweeted(post)}">
+                                            <i class="fa fa-retweet"></i>
+                                            <span>{{post.retweetUsers.length || ''}}</span>
+                                        </button>
+                                    </div>
+                                    <div class="post-btn-container" >
+                                        <!-- <button data-toggle="modal" (click)="setPostForComment(post)" data-toggle="modal" data-target="#myModal" >
+                                            <i class="fa fa-comment-o"></i>
+                                        </button> -->
+                                        <i class="fa fa-comment-o"></i>
+                                    </div>
+                                    <div class="post-btn-container">
+                                        <button (click)="$event.stopPropagation();like(post)" [ngClass]="{'liked': isLiked(post)}">
+                                            <i class="fa fa-heart-o"></i>
+                                            <span>{{post.likes.length || ''}}</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </ng-container>
+            </div>
+            <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+                <ng-container *ngFor="let post of posts" >
+                    <div class="pl-3 text-muted" *ngIf="post.retweetData">
+                        <i class="fa fa-retweet"></i> Retweeted by
+                       <a [routerLink]="['../profile',post.postBy.username]">@{{getRetweetText(post)}}</a> 
+                    </div>
+                   
+                        <div class="row m-0 p-2 border-bottom">
+                        <div class="col-3">
+                            <img src="assets/images/avatar.jpg" alt="profile pic" class="usr-img">
+                        </div>
+                        <div class="col-9 post-content-container">
+                            <div class="post-header">
+                                <span class="text-left">
+                                    <a [routerLink]="['../profile',post.postBy?.username]" class="text-dark font-weight-bold">
+                                        {{post.postBy?.firstName}} {{post.postBy?.lastName}}
+                                    </a>
+                                    <span class="pl-3 text-muted">@{{post.postBy?.username}}</span>
+                                    <span class="pl-3 text-muted">{{timeDiff(post.createdAt)}}</span>
+                                </span>
+                               
+                                <div class="text-muted" *ngIf="post.replyTo">
+                                    Replying to
+                                   <a [routerLink]="['../profile',post.postBy.username]">@{{getReplyText(post)}}</a> 
+                                </div>
+                                
+                            </div>
+                            <div class="post-body">
+                                {{getContent(post)}}
+                            </div>
+                            <div class="post-footer row m-0">
+                                <div class="col-7 user-actions pl-0">
+                                    <div class="post-btn-container">
+                                        <button (click)="retweet(post)" [ngClass]="{'retweeted': isRetweeted(post)}">
+                                            <i class="fa fa-retweet"></i>
+                                            <span>{{post.retweetUsers.length || ''}}</span>
+                                        </button>
+                                    </div>
+                                    <div class="post-btn-container" >
+                                        <!-- <button data-toggle="modal" (click)="setPostForComment(post)" data-toggle="modal" data-target="#myModal" >
+                                            <i class="fa fa-comment-o"></i>
+                                        </button> -->
+                                        <i class="fa fa-comment-o"></i>
+                                    </div>
+                                    <div class="post-btn-container">
+                                        <button (click)="$event.stopPropagation();like(post)" [ngClass]="{'liked': isLiked(post)}">
+                                            <i class="fa fa-heart-o"></i>
+                                            <span>{{post.likes.length || ''}}</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </ng-container>
+            </div>
+          </div>
+    </div>
+    <!-- {{profile.pageTitle}} -->
+
+</div>

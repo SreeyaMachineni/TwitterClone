@@ -1,0 +1,38 @@
+.profileHeaderContainer .coverPhotoContainer{
+    height: 180px;
+    background-color: blue;
+    position: relative;
+}
+
+.profileHeaderContainer .userImageContainer img{
+    height: 132px;
+    width: 132px;
+    border-radius: 50%;
+    position: absolute;
+    bottom: -66px;
+    border: 4px solid white;
+}
+.profileBtn,
+.follow-btn{
+    border: 1px solid blue;
+    color: blue;
+    font-weight: bold;
+    padding: 5px 15px;
+    border-radius: 60px;
+    display: inline-block;
+}
+.profileHeaderContainer .user-details-container{
+    display: flex;
+    flex-direction: column;
+
+}
+.followers-container a{
+    color:black;
+    text-decoration: none;
+}
+// .nav-link.active{
+//     background-color: white !important;
+//     color: black !important;
+//     border-bottom: 1px solid blue !important;
+//     border-radius: 0px !important;
+// }

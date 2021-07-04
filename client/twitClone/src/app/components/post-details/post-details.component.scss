@@ -1,0 +1,33 @@
+.usr-img{
+    width: 100px;
+    border-radius: 50%;
+    background-color: white;
+}
+.user-actions{
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+.post-btn-container{
+    display: flex;
+}
+
+.post-btn-container button{
+    padding: 2px 5px;
+    background-color: transparent;
+    border: none;
+    color: gray;
+}
+.post-btn-container button:hover{
+    background-color: #d4edff;
+    color: blue;
+    border-radius: 50%;
+}
+.liked{
+    color:red !important;
+    outline:none;
+}
+.retweeted{
+    color:green !important;
+    outline:none;
+}
